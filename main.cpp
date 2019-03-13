@@ -1,12 +1,8 @@
 #include <iostream>
-//#include <sys/types.h>
-//#include <sys/socket.h>
-#include <arpa/inet.h>  // inet_ntop()
-#include <netdb.h>      // gethostbyname()
-#include <unistd.h>     // close()
-//#include <netinet/in.h>
-//#include <netdb.h>
-//#include <cstring>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <unistd.h>
 
 int main(int argc, char **argv) {
     char host[] = "www.google.com";
@@ -14,6 +10,7 @@ int main(int argc, char **argv) {
     char ip[INET_ADDRSTRLEN];
     struct sockaddr_in addr{};
     struct hostent *host_info;
+    int sock;
 
     host_info = gethostbyname(host);
     addr.sin_family = AF_INET;
@@ -22,5 +19,11 @@ int main(int argc, char **argv) {
 
     inet_ntop(AF_INET, &(addr.sin_addr), ip, INET_ADDRSTRLEN);
     printf("%s\n", ip);
+
+    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+        printf("Socket creation error\n");
+        return -1;
+    }
+    connect(sock, (struct sockaddr *)&addr, sizeof(addr));
     return 0;
 }
