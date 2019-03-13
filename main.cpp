@@ -25,5 +25,6 @@ int main(int argc, char **argv) {
         return -1;
     }
     connect(sock, (struct sockaddr *)&addr, sizeof(addr));
+    close(sock);
     return 0;
 }
